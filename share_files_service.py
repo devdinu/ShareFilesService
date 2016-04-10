@@ -1,4 +1,5 @@
-from bottle import post, get, default_app, request, default_app
+from bottle import post, get, default_app, request, default_app, abort
+from bson.objectid import ObjectId
 from util import Util
 from config import Config
 import re
@@ -19,6 +20,16 @@ def search_files(pattern):
         Util.get_file_obj(record) for record in collection.find({'file_id': re.compile(pattern)})
     ]})
 
+@get('/files/<object_id>')
+def download_file(object_id):
+    try:
+        obj_id = ObjectId(object_id)
+    except:
+        abort(404, "No Record Found !")
+    record = collection.find_one({"_id": obj_id})
+    return bytes(record.get('content'), 'utf-8') if record else None
+
+
 @get('/ping')
 def ping():
     print("Successful request....")
@@ -28,6 +39,5 @@ application = default_app()
 
 if __name__=="__main__":
     Config.enable_reload = True
-
 
 application.run(reloader=Config.enable_reload)
