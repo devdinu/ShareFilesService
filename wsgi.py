@@ -10,4 +10,4 @@ try:
 except IOError:
     pass
 
-from sync_preference_service import application as application
+from share_files_service import application as application

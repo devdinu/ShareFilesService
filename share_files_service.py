@@ -38,6 +38,6 @@ def ping():
 application = default_app()
 
 if __name__=="__main__":
-    Config.enable_reload = True
+    application.run(reloader=Config.enable_reload)
 
-application.run(reloader=Config.enable_reload)
+
