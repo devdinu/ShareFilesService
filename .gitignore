@@ -1,0 +1,7 @@
+# Python Specific
+__pycache__
+
+
+# Common
+*.swp
+

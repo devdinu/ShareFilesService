@@ -1,21 +1,23 @@
-from bottle import post, get, default_app, request
+from bottle import post, get, default_app, request, default_app
+from util import Util
 from config import Config
-
+import re
 import os
 import json
-import pdb
 
 collection = Config.collection
-
-def get_mongo_consitent(name):
-    return name.replace(Config.DOT_CHAR, Config.DOT_UNICODE)
-
 
 @post('/upload/<file_name>')
 def share_file(file_name):
     content = request.body.read().decode('utf-8')
     print("saving file:" + file_name)
-    return collection.insert({'file_id': get_mongo_consitent(file_name), 'content': content})
+    return collection.insert({'file_id': Util.get_mongo_consitent(file_name), 'content': content})
+
+@get('/search/<pattern>')
+def search_files(pattern):
+    return json.dumps({"files": [
+        Util.get_file_obj(record) for record in collection.find({'file_id': re.compile(pattern)})
+    ]})
 
 @get('/ping')
 def ping():
@@ -25,4 +27,7 @@ def ping():
 application = default_app()
 
 if __name__=="__main__":
-    application.run(debug=True)
+    Config.enable_reload = True
+
+
+application.run(reloader=Config.enable_reload)

@@ -7,3 +7,4 @@ class Config():
     DOT_CHAR = "."
     DOT_UNICODE = "\\uff0"
     enode_format = 'utf-8'
+    enable_reload = False
