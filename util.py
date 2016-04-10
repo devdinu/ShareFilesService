@@ -21,4 +21,4 @@ class File:
     def __init__(self, record):
         self.file_name = Util.get_convert_unicodes_to_dot(record.get('file_id'))
         self.id = str(record.get('_id'))
-        self.created_at = record.get('_id').generation_time.strftime("%c")
+        self.created_at = record.get('_id').generation_time.strftime("%x")
