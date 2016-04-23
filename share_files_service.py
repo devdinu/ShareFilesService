@@ -16,10 +16,12 @@ def share_file(file_name, user_id):
     collection.insert({'file_id': Util.get_mongo_consitent(file_name), 'content': content, 'user_id': user_id})
     return HTTPResponse(status=201, body=str(user_id))
 
-@get('/search/<pattern>')
-def search_files(pattern):
+@get('/users/<user_id>/files/search')
+def search_files(user_id):
+    pattern = request.params.get('pattern')
     return json.dumps({"files": [
-        Util.get_file_obj(record) for record in collection.find({'file_id': re.compile(pattern)})
+        Util.get_file_obj(record) for record in collection.find(
+            {'user_id': user_id, 'file_id': re.compile(pattern)})
     ]})
 
 @get('/files/<object_id>')

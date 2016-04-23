@@ -5,3 +5,4 @@ __pycache__
 # Common
 *.swp
 
+.python-version
