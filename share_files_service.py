@@ -1,4 +1,4 @@
-from bottle import post, get, default_app, request, default_app, abort, HTTPResponse
+from bottle import post, get, default_app, request, default_app, abort, HTTPResponse, delete
 from bson.objectid import ObjectId
 from util import Util
 from config import Config
@@ -8,6 +8,7 @@ import json
 import uuid
 
 collection = Config.collection
+application = default_app()
 
 @post('/users/<user_id>/files/<file_name>')
 def share_file(file_name, user_id):
@@ -42,7 +43,14 @@ def ping():
     print("Successful request....")
     return "Pong!"
 
-application = default_app()
+@delete('/users/<user_id>/files/<file_object_id>')
+def delete_file(user_id, file_object_id):
+    try:
+        oid = ObjectId(file_object_id)
+    except:
+        abort(404, "No Record Found !")
+    if oid: collection.delete_one({'_id': oid, 'user_id': user_id})
+
 
 if __name__=="__main__":
     application.run(reloader=Config.enable_reload)
