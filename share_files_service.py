@@ -14,7 +14,7 @@ def share_file(file_name, user_id):
     content = request.body.read().decode('utf-8')
     print("saving file:" + file_name)
     collection.insert({'file_id': Util.get_mongo_consitent(file_name), 'content': content, 'user_id': user_id})
-    return HTTPResponse(status=201, body= "file upload success for user %s" % str(user_id))
+    return HTTPResponse(status=201, body=str(user_id))
 
 @get('/search/<pattern>')
 def search_files(pattern):
@@ -31,7 +31,7 @@ def download_file(object_id):
     record = collection.find_one({"_id": obj_id})
     return bytes(record.get('content'), 'utf-8') if record else None
 
-@get('/user/create')
+@get('/users/create')
 def create_user():
     return str(uuid.uuid4())
 
