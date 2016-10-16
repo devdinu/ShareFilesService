@@ -49,7 +49,7 @@ def delete_file(user_id, file_object_id):
         oid = ObjectId(file_object_id)
     except:
         abort(404, "No Record Found !")
-    if oid: collection.delete_one({'_id': oid, 'user_id': user_id})
+    if oid: return collection.remove({'_id': oid, 'user_id': user_id})
 
 
 if __name__=="__main__":
